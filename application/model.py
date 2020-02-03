@@ -1,9 +1,21 @@
-from time import sleep
-import plotly
-import plotly.graph_objects as go
+class MetaSingleton(type):
+    _instances = {}
 
-import numpy as np
-import json
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(MetaSingleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class Processing(metaclass=MetaSingleton):
+    def __init__(self):
+        self.report = None
+
+    def set_report(self, report):
+        self.report = report
+
+    def get_cluster(self):
+        return self.report
 
 
 class Model(object):  # todo SINGLETON class
@@ -11,25 +23,8 @@ class Model(object):  # todo SINGLETON class
     @staticmethod
     def send_report(report):
         print(report)  # todo initialization SINGLETON if python can
+        Processing().set_report(report)
 
     @staticmethod
     def get_response():
-        sleep(1)  # todo waiting for "report processing" and then return response of model
-        return "Отчёт принят!"
-
-    @staticmethod
-    def create_plot():  # todo ???
-        n = 100000
-        fig = go.Figure(data=go.Scattergl(
-            x=np.random.randn(n),  # todo
-            y=np.random.randn(n),  # todo
-            mode='markers',
-            marker=dict(
-                color=np.random.randn(n),  # todo
-                colorscale='Viridis',
-                line_width=1
-            )
-        ))
-
-        graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return graph_json
+        return "Отчёт принят!\n{}".format(Processing().get_cluster())

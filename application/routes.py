@@ -14,7 +14,7 @@ def submit():
     request_form = RequestForm()
     if request_form.validate_on_submit():
         Model.send_report(request_form.body.data)
-        return redirect(url_for('response'))  # todo right Post/Redirect/Get
+        return redirect(url_for('response'))
     return render_template('submit.html', form=request_form)
 
 
@@ -23,8 +23,3 @@ def response():
     response_form = ResponseForm()
     response_form.body.data = Model.get_response()
     return render_template('response.html', form=response_form)
-
-
-@app.route('/statistic', methods=['GET'])
-def statistic():
-    return render_template('statistic.html', plot=Model.create_plot())
