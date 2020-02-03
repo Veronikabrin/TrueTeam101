@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart" id="statistic">
+                    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+                    <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+                    <script>
+                        graphs = {{plot | safe}};
+                        Plotly.plot('statistic', graphs, {});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form>
+        <input type="button" value="Отправить ещё один отчёт" onClick='location.href="/submit"'>
+    </form>
+{% endblock %}
